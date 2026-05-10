@@ -28,8 +28,7 @@ node_modules/
 dist/
 .npm
 
-# Environment
-.env
+# Environment (保留 .env.local 作为本地覆盖，.env 纳入版本控制作为默认配置)
 .env.local
 
 # Docker

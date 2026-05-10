@@ -23,7 +23,16 @@ jobs:
             exit 1
           fi
 
-      - name: 🔍 验证配置有效性 (Config Check)
+      - name: � 同步版本号 (Version Sync)
+        run: |
+          if [ -f "sync-version.sh" ]; then
+            chmod +x sync-version.sh
+            ./sync-version.sh
+          else
+            echo "⚠️  未找到 sync-version.sh，跳过版本同步"
+          fi
+
+      - name: �🔍 验证配置有效性 (Config Check)
         run: docker compose config
         
       - name: 🏗️ 测试 Docker 构建 (Build Test)
