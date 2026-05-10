@@ -1,28 +1,29 @@
-# 构建阶段
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# 复制 package 文件
+ARG APP_VERSION=1.0.0
+
 COPY package*.json ./
 
-# 配置 npm 镜像源并安装依赖
 RUN npm config set registry https://registry.npmmirror.com && \
     npm install
 
-# 复制源代码并构建
 COPY . .
+
+ENV VUE_APP_VERSION=${APP_VERSION}
 RUN npm run build
 
-# 生产阶段
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# 从构建阶段复制构建产物
+ARG APP_VERSION=1.0.0
+
 COPY --from=builder /app/dist .
 
-# 复制 nginx 配置
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
+
+ENV APP_VERSION=${APP_VERSION}
 
 CMD ["nginx", "-g", "daemon off;"]
