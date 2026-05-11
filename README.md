@@ -137,6 +137,60 @@ mvn spring-boot:run
 # 访问: http://localhost:8080
 ```
 
+## 🔢 版本管理流程
+
+本项目采用 **一处定义、全链路同步** 的版本管理方案，确保发布时各容器镜像版本一致。
+
+### 📦 统一版本源
+
+所有版本号统一在根目录的 `.version` 文件定义，自动同步到以下位置：
+
+| 位置 | 用途 |
+| :--- | :--- |
+| `.env` | Docker Compose 环境变量 |
+| `backend/pom.xml` | Maven 项目版本 |
+| `frontend/package.json` | NPM 项目版本 |
+| `docker-compose.yml` | 镜像标签（通过环境变量） |
+| 运行时 | 后端 `/api/version` 接口展示 |
+
+> **注意**: 脚本只会修改**项目自身的应用版本，不会影响 Spring Boot、Hutool 等框架和依赖的版本。
+
+### 🚀 版本发布流程
+
+**方式一：一键升级（推荐）**
+```bash
+# 1. 运行版本升级脚本
+./bump-version.sh 1.0.1
+
+# 2. 构建带版本标签的镜像
+docker compose build
+
+# 3. 验证镜像标签
+docker images | grep yanbian
+```
+
+**方式二：手动同步**
+```bash
+# 1. 修改版本号
+echo "1.0.1" > .version
+
+# 2. 运行同步脚本
+./sync-version.sh
+
+# 3. 构建镜像
+docker compose build
+```
+
+### 📋 发布检查清单
+
+每次发布前请确认：
+
+- [ ] 已运行版本同步脚本
+- [ ] `docker compose config` 配置验证通过
+- [ ] `docker compose build` 镜像构建成功
+- [ ] 镜像标签与目标版本一致
+- [ ] 本地测试通过后再推送到镜像仓库
+
 ## 📄 许可证
 MIT License
 

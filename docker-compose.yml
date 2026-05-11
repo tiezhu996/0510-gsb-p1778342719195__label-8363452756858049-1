@@ -1,7 +1,9 @@
 version: '3.8'
 
+x-common-vars: &common-vars
+  VERSION: ${VERSION:-1.0.0}
+
 services:
-  # MySQL 数据库
   db:
     image: mysql:8.0
     container_name: yanbian-db
@@ -25,13 +27,16 @@ services:
       timeout: 5s
       retries: 5
 
-  # Spring Boot 后端
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-1.0.0}
+    image: ${IMAGE_REGISTRY:-yanbian}-backend:${VERSION:-1.0.0}
     container_name: yanbian-backend
     environment:
+      <<: *common-vars
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/yanbian_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: yanbian
@@ -52,11 +57,13 @@ services:
       retries: 3
       start_period: 60s
 
-  # Vue 前端
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-1.0.0}
+    image: ${IMAGE_REGISTRY:-yanbian}-frontend:${VERSION:-1.0.0}
     container_name: yanbian-frontend
     ports:
       - "3000:3000"
