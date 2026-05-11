@@ -1,6 +1,8 @@
 # 构建阶段
+ARG APP_VERSION
 FROM node:20-alpine AS builder
 WORKDIR /app
+ARG APP_VERSION
 
 # 复制 package 文件
 COPY package*.json ./
@@ -8,6 +10,9 @@ COPY package*.json ./
 # 配置 npm 镜像源并安装依赖
 RUN npm config set registry https://registry.npmmirror.com && \
     npm install
+
+# 更新版本号
+RUN npm version ${APP_VERSION} --no-git-tag-version
 
 # 复制源代码并构建
 COPY . .

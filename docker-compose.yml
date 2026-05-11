@@ -30,12 +30,16 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION}
+    image: ${IMAGE_REGISTRY}${BACKEND_IMAGE}:${APP_VERSION}
     container_name: yanbian-backend
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/yanbian_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: yanbian
       SPRING_DATASOURCE_PASSWORD: yanbian123
+      APP_VERSION: ${APP_VERSION}
     ports:
       - "8080:8080"
     depends_on:
@@ -57,6 +61,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION}
+    image: ${IMAGE_REGISTRY}${FRONTEND_IMAGE}:${APP_VERSION}
     container_name: yanbian-frontend
     ports:
       - "3000:3000"

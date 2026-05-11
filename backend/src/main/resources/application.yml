@@ -1,6 +1,9 @@
 spring:
   application:
     name: yanbian-backend
+
+app:
+  version: ${APP_VERSION:2.0.0}
   
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
