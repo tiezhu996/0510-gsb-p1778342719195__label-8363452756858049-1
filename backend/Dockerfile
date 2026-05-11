@@ -1,6 +1,8 @@
 # 构建阶段
+ARG APP_VERSION
 FROM maven:3.9-amazoncorretto-17-alpine AS build
 WORKDIR /app
+ARG APP_VERSION
 
 # 配置阿里云 Maven 镜像
 RUN mkdir -p /root/.m2 && \
@@ -22,11 +24,14 @@ RUN mvn dependency:go-offline -B
 
 # 复制源代码并构建
 COPY src ./src
+RUN mvn versions:set -DnewVersion=${APP_VERSION} -DgenerateBackupPoms=false
 RUN mvn package -DskipTests
 
 # 运行阶段
 FROM amazoncorretto:17-alpine-jdk
 WORKDIR /app
+ARG APP_VERSION
+ENV APP_VERSION=${APP_VERSION}
 
 # 创建上传目录
 RUN mkdir -p /app/uploads

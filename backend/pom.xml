@@ -14,7 +14,7 @@
     
     <groupId>com.yanbian</groupId>
     <artifactId>yanbian-backend</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <name>Yanbian Introduction Website Backend</name>
     <description>Backend service for Yanbian Korean Autonomous Prefecture introduction website</description>
     
