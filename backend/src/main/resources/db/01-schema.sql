@@ -1,0 +1,128 @@
+SET NAMES utf8mb4;
+-- 延边朝鲜族自治州介绍网站数据库表结构
+
+-- 1. 轮播图表
+CREATE TABLE IF NOT EXISTS carousel (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    title VARCHAR(200) COMMENT '标题',
+    image_url VARCHAR(500) NOT NULL COMMENT '图片URL',
+    link_url VARCHAR(500) COMMENT '跳转链接',
+    sort_order INT DEFAULT 0 COMMENT '排序',
+    status TINYINT DEFAULT 1 COMMENT '状态 1-启用 0-禁用',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='轮播图表';
+
+-- 2. 新闻表
+CREATE TABLE IF NOT EXISTS news (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    title VARCHAR(200) NOT NULL COMMENT '标题',
+    summary TEXT COMMENT '摘要',
+    content LONGTEXT COMMENT '内容',
+    cover_image VARCHAR(500) COMMENT '封面图',
+    category VARCHAR(50) COMMENT '分类',
+    view_count INT DEFAULT 0 COMMENT '浏览量',
+    is_hot TINYINT DEFAULT 0 COMMENT '是否热门',
+    status TINYINT DEFAULT 1 COMMENT '状态',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='新闻表';
+
+-- 3. 简介内容表
+CREATE TABLE IF NOT EXISTS introduction (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    section_name VARCHAR(100) NOT NULL COMMENT '章节名称',
+    content LONGTEXT COMMENT '内容',
+    images TEXT COMMENT '图片列表（JSON数组）',
+    sort_order INT DEFAULT 0 COMMENT '排序',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='简介内容表';
+
+-- 4. 风景名胜表
+CREATE TABLE IF NOT EXISTS scenic_spot (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    name VARCHAR(200) NOT NULL COMMENT '景点名称',
+    description TEXT COMMENT '描述',
+    detail_content LONGTEXT COMMENT '详细介绍',
+    cover_image VARCHAR(500) COMMENT '封面图',
+    images TEXT COMMENT '图片集（JSON数组）',
+    location VARCHAR(200) COMMENT '位置',
+    ticket_price DECIMAL(10,2) COMMENT '门票价格',
+    rating DECIMAL(3,2) DEFAULT 5.0 COMMENT '评分',
+    view_count INT DEFAULT 0 COMMENT '浏览量',
+    status TINYINT DEFAULT 1 COMMENT '状态',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='风景名胜表';
+
+-- 5. 美食表
+CREATE TABLE IF NOT EXISTS food (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    name VARCHAR(200) NOT NULL COMMENT '美食名称',
+    description TEXT COMMENT '描述',
+    detail_content LONGTEXT COMMENT '详细介绍',
+    cover_image VARCHAR(500) COMMENT '封面图',
+    images TEXT COMMENT '图片集（JSON数组）',
+    category VARCHAR(50) COMMENT '分类',
+    price_range VARCHAR(50) COMMENT '价格区间',
+    rating DECIMAL(3,2) DEFAULT 5.0 COMMENT '评分',
+    popularity INT DEFAULT 0 COMMENT '人气值',
+    is_featured TINYINT DEFAULT 0 COMMENT '是否推荐',
+    status TINYINT DEFAULT 1 COMMENT '状态',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='美食表';
+
+-- 6. 站长信息表
+CREATE TABLE IF NOT EXISTS webmaster (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    name VARCHAR(100) NOT NULL COMMENT '姓名',
+    avatar VARCHAR(500) COMMENT '头像',
+    signature VARCHAR(500) COMMENT '个性签名',
+    introduction LONGTEXT COMMENT '自我介绍',
+    email VARCHAR(100) COMMENT '邮箱',
+    phone VARCHAR(50) COMMENT '电话',
+    wechat VARCHAR(100) COMMENT '微信',
+    qq VARCHAR(50) COMMENT 'QQ',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='站长信息表';
+
+-- 7. 在线调查表
+CREATE TABLE IF NOT EXISTS survey (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    name VARCHAR(100) NOT NULL COMMENT '姓名',
+    gender VARCHAR(10) COMMENT '性别',
+    age_range VARCHAR(20) COMMENT '年龄段',
+    visit_purpose TEXT COMMENT '访问目的（多选，JSON数组）',
+    satisfaction INT COMMENT '满意度（1-5）',
+    suggestions TEXT COMMENT '建议',
+    email VARCHAR(100) COMMENT '邮箱',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='在线调查表';
+
+-- 8. 宣传视频表
+CREATE TABLE IF NOT EXISTS video (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    title VARCHAR(200) NOT NULL COMMENT '标题',
+    video_url VARCHAR(500) NOT NULL COMMENT '视频URL',
+    cover_image VARCHAR(500) COMMENT '封面图',
+    duration INT COMMENT '时长（秒）',
+    category VARCHAR(50) COMMENT '分类',
+    view_count INT DEFAULT 0 COMMENT '浏览量',
+    sort_order INT DEFAULT 0 COMMENT '排序',
+    status TINYINT DEFAULT 1 COMMENT '状态',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='宣传视频表';
+
+-- 9. 文件上传记录表
+CREATE TABLE IF NOT EXISTS upload_file (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+    original_name VARCHAR(500) COMMENT '原始文件名',
+    file_name VARCHAR(500) NOT NULL COMMENT '存储文件名',
+    file_path VARCHAR(500) NOT NULL COMMENT '文件路径',
+    file_size BIGINT COMMENT '文件大小（字节）',
+    file_type VARCHAR(50) COMMENT '文件类型',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件上传记录表';
