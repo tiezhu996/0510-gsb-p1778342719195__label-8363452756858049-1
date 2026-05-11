@@ -29,7 +29,6 @@ dist/
 .npm
 
 # Environment
-.env
 .env.local
 
 # Docker
